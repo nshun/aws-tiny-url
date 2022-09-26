@@ -1,0 +1,7 @@
+#set($long_url = $input.path('$.Item.long_url.S'))
+#if(!$long_url.isEmpty())
+    #set($context.responseOverride.status = 302)
+    #set($context.responseOverride.header.location = $long_url)
+#else
+$input.json('$')
+#end

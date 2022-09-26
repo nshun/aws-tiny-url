@@ -1,0 +1,17 @@
+#set($inputRoot = $input.path('$'))
+#set($id = $context.requestId.split('-')[0])
+#set($expireDate = $context.requestTimeEpoch / 1000 + 60*60*24*7)
+{
+    "TableName": "{{TableName}}",
+    "Item": {
+        "id": {
+            "S": "$id"
+        },
+        "long_url": {
+            "S": "$inputRoot.url"
+        },
+        "expireDate": {
+            "N": "$expireDate"
+        }
+    }
+}
