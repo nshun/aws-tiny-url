@@ -37,6 +37,20 @@ export class ApiStack extends Stack {
       assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
     });
     table.grantWriteData(putItemRole);
+    const requestModel = api.addModel('RequestModel', {
+      contentType: 'application/json',
+      modelName: 'TinyUrlRequestModel',
+      schema: {
+        type: apigateway.JsonSchemaType.OBJECT,
+        required: ['url'],
+        properties: {
+          url: { ref: '#/definitions/validUrl' },
+        },
+        definitions: {
+          validUrl: { format: 'uri', pattern: '^https?://' },
+        },
+      },
+    });
     const putItemIntegration = new apigateway.AwsIntegration({
       service: 'dynamodb',
       action: 'PutItem',
@@ -74,6 +88,12 @@ export class ApiStack extends Stack {
           },
         },
       ],
+      requestModels: {
+        'application/json': requestModel,
+      },
+      requestValidatorOptions: {
+        validateRequestBody: true,
+      },
     });
 
     const idResouce = api.root.addResource('{id}');
