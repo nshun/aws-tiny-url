@@ -1,14 +1,49 @@
-# Welcome to your CDK TypeScript project
+# AWS で作る URL 短縮サービス
 
-This is a blank project for CDK development with TypeScript.
+- 使用サービス
+  - API Gateway, DynamoDB
+- 使用言語、フレームワーク
+  - Typescript, CDK, React, Vite, Cloudscape
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## 構築してテストする
 
-## Useful commands
+1. バックエンドをデプロイ
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
+```
+cd backend/
+cdk deploy
+```
+
+_出力から API エンドポイント名をコピー_
+
+2. API エンドポイントを設定
+
+   - `frontend/src/config.ts` の API_ENDPOINT をコピーした値に編集
+
+3. フロントエンドをローカル実行
+
+```
+cd frontend/
+pnpm install
+pnpm run dev
+```
+
+4. ブラウザが開くのでアクセスしてテストする
+
+## (オプション) 公開する
+
+1. フロントエンドをビルド
+
+```
+cd frontend/
+pnpm run build
+```
+
+2. ビルドされたファイルを S3 などに配置して公開
+
+## 削除
+
+```
+cd backend/
+cdk destroy
+```
