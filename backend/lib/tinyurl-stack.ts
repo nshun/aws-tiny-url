@@ -21,11 +21,17 @@ export class TinyUrlStack extends Stack {
         type: dynamodb.AttributeType.STRING,
       },
       timeToLiveAttribute: 'expireDate',
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      billingMode: dynamodb.BillingMode.PROVISIONED,
+      readCapacity: 1,
+      writeCapacity: 1,
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
     const api = new apigateway.RestApi(this, 'TinyUrlApi');
+    api.root.addCorsPreflight({
+      allowOrigins: apigateway.Cors.ALL_ORIGINS,
+      allowMethods: ['OPTIONS, POST'],
+    });
 
     const putItemRole = new iam.Role(this, 'TinyUrlDdbWriteRole', {
       assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
@@ -52,12 +58,22 @@ export class TinyUrlStack extends Stack {
                 .readFileSync(path.resolve(__dirname, './templates/ddb_putitem.res.vtl'))
                 .toString(),
             },
+            responseParameters: {
+              'method.response.header.Access-Control-Allow-Origin': "'*'",
+            },
           },
         ],
       },
     });
     api.root.addMethod('POST', putItemIntegration, {
-      methodResponses: [{ statusCode: '200' }],
+      methodResponses: [
+        {
+          statusCode: '200',
+          responseParameters: {
+            'method.response.header.Access-Control-Allow-Origin': true,
+          },
+        },
+      ],
     });
 
     const idResouce = api.root.addResource('{id}');
