@@ -38,7 +38,7 @@ export default function App() {
 
         <Container>
           <SpaceBetween size="s">
-            <Input value={longUrl} onChange={(event) => setLongUrl(event.detail.value)} placeholder="長い URL" />
+            <Input value={longUrl} onChange={(event) => setLongUrl(event.detail.value)} placeholder="URL" />
             <Button variant="primary" onClick={handleClickConfirm} disabled={!longUrl}>
               送信
             </Button>
@@ -69,6 +69,14 @@ export default function App() {
           </Container>
         </Box>
       </SpaceBetween>
+      <Box textAlign="center">
+        {'© Shun Nishimura '}
+        {new Date().getFullYear()}
+        {'.'}
+        <Link external href="https://github.com/nshun/aws-tiny-url">
+          Github
+        </Link>
+      </Box>
     </Box>
   );
 }
