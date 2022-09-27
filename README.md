@@ -2,12 +2,20 @@
 
 - 使用サービス
   - API Gateway, DynamoDB
+  - (オプション) CloudFront, S3
 - 使用言語、フレームワーク
-  - Typescript, CDK, React, Vite, Cloudscape
+  - Node.js, Typescript, pnpm
+  - CDK, React, Vite, Cloudscape
 
 ## 構築してテストする
 
-1. バックエンドをデプロイ
+1. 依存パッケージをインストール
+
+```
+pnpm install
+```
+
+2. バックエンドをデプロイ
 
 ```
 cd backend/
@@ -16,19 +24,18 @@ cdk deploy
 
 _出力から API エンドポイント名をコピー_
 
-2. API エンドポイントを設定
+3. API エンドポイントを設定
 
    - `frontend/src/config.ts` の API_ENDPOINT をコピーした値に編集
 
-3. フロントエンドをローカル実行
+4. フロントエンドをローカル実行
 
 ```
 cd frontend/
-pnpm install
 pnpm run dev
 ```
 
-4. ブラウザが開くのでアクセスしてテストする
+5. ブラウザが開くのでアクセスしてテストする
 
 ## (オプション) 公開する
 
@@ -39,11 +46,19 @@ cd frontend/
 pnpm run build
 ```
 
-2. ビルドされたファイルを S3 などに配置して公開
+2. S3 に配置して CloudFront で公開
+
+```
+cd hosting
+cdk deploy
+```
 
 ## 削除
 
 ```
 cd backend/
+cdk destroy
+
+cd hosting/
 cdk destroy
 ```
