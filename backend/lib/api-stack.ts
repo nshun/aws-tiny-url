@@ -11,7 +11,7 @@ import {
 import * as path from 'path';
 import * as fs from 'fs';
 
-export class TinyUrlStack extends Stack {
+export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
