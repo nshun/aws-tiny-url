@@ -1,10 +1,16 @@
 # AWS で作る URL 短縮サービス
 
+![アーキテクチャ図](architecture.png)
+
 - 使用サービス
-  - API Gateway, DynamoDB
-  - (オプション) CloudFront, S3
+  - バックエンド
+    - API Gateway: 統合、検証、マッピング
+    - DynamoDB: URL データベース
+  - フロントエンド
+    - CloudFront: HTTPS 公開
+    - S3: 静的コンテンツのホスト
 - 使用言語、フレームワーク
-  - Node.js, Typescript, pnpm
+  - Node.js(pnpm), Typescript
   - CDK, React, Vite, Cloudscape
 
 ## 構築してテストする
