@@ -1,5 +1,3 @@
 packages:
-  # packages/ と components/ のすべてのサブディレクトリを含める
   - 'backend/**'
   - 'frontend/**'
-  - 'hosting/**'

@@ -21,11 +21,11 @@
 pnpm install
 ```
 
-2. バックエンドをデプロイ
+2. API をデプロイ
 
 ```
 cd backend/
-cdk deploy
+cdk deploy TinyUrlApiStack
 ```
 
 _出力から API エンドポイント名をコピー_
@@ -55,16 +55,13 @@ pnpm run build
 2. S3 に配置して CloudFront で公開
 
 ```
-cd hosting
-cdk deploy
+cd backend/
+cdk deploy TinyUrlHostingStack
 ```
 
 ## 削除
 
 ```
 cd backend/
-cdk destroy
-
-cd hosting/
-cdk destroy
+cdk destroy --all
 ```

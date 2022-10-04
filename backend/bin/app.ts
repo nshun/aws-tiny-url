@@ -2,6 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { ApiStack } from '../lib/api-stack';
+import { HostingStack } from '../lib/hosting-stack';
 
 const app = new cdk.App();
 const env = {
@@ -10,3 +11,5 @@ const env = {
 };
 
 new ApiStack(app, 'TinyUrlApiStack', { env });
+
+new HostingStack(app, 'TinyUrlHostingStack', { env });
