@@ -76,6 +76,13 @@ export class ApiStack extends Stack {
               'method.response.header.Access-Control-Allow-Origin': "'*'",
             },
           },
+          {
+            statusCode: '400',
+            selectionPattern: '[45]\\d{2}',
+            responseParameters: {
+              'method.response.header.Access-Control-Allow-Origin': "'*'",
+            },
+          },
         ],
       },
     });
@@ -83,6 +90,12 @@ export class ApiStack extends Stack {
       methodResponses: [
         {
           statusCode: '200',
+          responseParameters: {
+            'method.response.header.Access-Control-Allow-Origin': true,
+          },
+        },
+        {
+          statusCode: '400',
           responseParameters: {
             'method.response.header.Access-Control-Allow-Origin': true,
           },
