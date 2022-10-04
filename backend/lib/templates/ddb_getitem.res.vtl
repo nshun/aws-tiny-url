@@ -3,5 +3,5 @@
     #set($context.responseOverride.status = 302)
     #set($context.responseOverride.header.location = $long_url)
 #else
-$input.json('$')
+    #set($context.responseOverride.status = 404)
 #end
