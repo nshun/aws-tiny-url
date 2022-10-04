@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import {
+  Alert,
   Header,
   Container,
+  ContentLayout,
   SpaceBetween,
   Input,
   Button,
@@ -16,6 +18,7 @@ import config from './config';
 export default function App() {
   const [longUrl, setLongUrl] = useState('');
   const [tinyUrl, setTinyUrl] = useState('');
+  const [error, setError] = useState(false);
 
   const handleClickConfirm = () => {
     const requestOptions = {
@@ -27,27 +30,45 @@ export default function App() {
       .then((res) => res.json())
       .then(
         (result) => setTinyUrl(result.tiny),
-        (error) => console.error(error)
+        (error) => setError(true)
       );
   };
 
   return (
-    <Box margin="xl">
-      <SpaceBetween size="m">
-        <Header variant="h1">URL 短縮サービス</Header>
-
-        <Container>
-          <SpaceBetween size="s">
-            <Input value={longUrl} onChange={(event) => setLongUrl(event.detail.value)} placeholder="URL" />
-            <Button variant="primary" onClick={handleClickConfirm} disabled={!longUrl}>
-              送信
-            </Button>
-          </SpaceBetween>
-        </Container>
-
-        <Box display={tinyUrl ? 'block' : 'none'}>
-          <Container>
-            <Header variant="h3">生成された短縮 URL</Header>
+    <ContentLayout
+      header={
+        <Box margin={{ top: 'xxl', horizontal: 'xxl' }}>
+          <Header
+            variant="h1"
+            description={
+              <Button href="https://github.com/nshun/aws-tiny-url" target="_blank">
+                <Link external>Github</Link>
+              </Button>
+            }
+          >
+            AWS で作る短縮 URL サービス
+          </Header>
+        </Box>
+      }
+    >
+      <Box margin="l">
+        <Box margin={{ bottom: 'm' }}>
+          <Alert
+            onDismiss={() => setError(false)}
+            visible={error}
+            dismissAriaLabel="アラートを閉じる"
+            dismissible
+            type="error"
+            header="エラー"
+          />
+          <Alert
+            onDismiss={() => setTinyUrl('')}
+            visible={tinyUrl !== ''}
+            dismissAriaLabel="アラートを閉じる"
+            dismissible
+            type="success"
+            header="生成された短縮 URL (有効期限 1週間)"
+          >
             <Popover
               size="small"
               position="bottom"
@@ -66,17 +87,22 @@ export default function App() {
             <Link external externalIconAriaLabel="新しいタブで開く" href={tinyUrl}>
               {tinyUrl}
             </Link>
-          </Container>
+          </Alert>
         </Box>
-      </SpaceBetween>
-      <Box textAlign="center">
+        <Container header={<Header variant="h2">短縮 URL 生成</Header>}>
+          <SpaceBetween size="m">
+            <Input value={longUrl} onChange={(event) => setLongUrl(event.detail.value)} placeholder="長いURL" />
+            <Button variant="primary" onClick={handleClickConfirm} disabled={!longUrl}>
+              送信
+            </Button>
+          </SpaceBetween>
+        </Container>
+      </Box>
+      <Box textAlign="center" margin="m">
         {'© Shun Nishimura '}
         {new Date().getFullYear()}
         {'.'}
-        <Link external href="https://github.com/nshun/aws-tiny-url">
-          Github
-        </Link>
       </Box>
-    </Box>
+    </ContentLayout>
   );
 }
