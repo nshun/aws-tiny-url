@@ -40,13 +40,14 @@ export default function App() {
         <Box margin={{ top: 'xxl', horizontal: 'xxl' }}>
           <Header
             variant="h1"
-            description={
+            description="AWS で作る短縮 URL サービス"
+            actions={
               <Button href="https://github.com/nshun/aws-tiny-url" target="_blank">
                 <Link external>Github</Link>
               </Button>
             }
           >
-            AWS で作る短縮 URL サービス
+            Tiny URL
           </Header>
         </Box>
       }
@@ -89,7 +90,7 @@ export default function App() {
             </Link>
           </Alert>
         </Box>
-        <Container header={<Header variant="h2">短縮 URL 生成</Header>}>
+        <Container header={<Header variant="h2">URL を短縮</Header>}>
           <SpaceBetween size="m">
             <Input value={longUrl} onChange={(event) => setLongUrl(event.detail.value)} placeholder="長いURL" />
             <Button variant="primary" onClick={handleClickConfirm} disabled={!longUrl}>

@@ -3,10 +3,10 @@
 ![アーキテクチャ図](architecture.png)
 
 - 使用サービス
-  - バックエンド
+  - API & バックエンド
     - API Gateway: 統合、検証、マッピング
     - DynamoDB: URL データベース
-  - フロントエンド
+  - 静的サイトのホスティング
     - CloudFront: HTTPS 公開
     - S3: 静的コンテンツのホスト
 - 使用言語、フレームワーク
