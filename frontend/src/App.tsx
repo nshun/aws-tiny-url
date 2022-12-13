@@ -86,7 +86,7 @@ export default function App() {
               />
             </Popover>
             <Link external externalIconAriaLabel="新しいタブで開く" href={tinyUrl}>
-              {tinyUrl}
+              {tinyUrl.replace(/https?:\/\//, '')}
             </Link>
           </Alert>
         </Box>
