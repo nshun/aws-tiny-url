@@ -6,6 +6,7 @@ import {
   aws_iam as iam,
   aws_dynamodb as dynamodb,
   aws_apigateway as apigateway,
+  aws_lambda as lambda,
 } from 'aws-cdk-lib';
 
 import * as path from 'path';
@@ -111,36 +112,21 @@ export class ApiStack extends Stack {
 
     const idResouce = api.root.addResource('{id}');
     const getItemRole = new iam.Role(this, 'TinyUrlDdbReadRole', {
-      assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
     });
+    getItemRole.addManagedPolicy(
+      iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole')
+    );
     table.grantReadData(getItemRole);
-    const getItemIntegration = new apigateway.AwsIntegration({
-      service: 'dynamodb',
-      action: 'GetItem',
-      region: Stack.of(this).region,
-      options: {
-        credentialsRole: getItemRole,
-        requestTemplates: {
-          'application/json': fs
-            .readFileSync(path.resolve(__dirname, './templates/ddb_getitem.req.vtl'))
-            .toString()
-            .replace(/{{TableName}}/g, table.tableName),
-        },
-        passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
-        integrationResponses: [
-          {
-            statusCode: '200',
-            responseTemplates: {
-              'application/json': fs
-                .readFileSync(path.resolve(__dirname, './templates/ddb_getitem.res.vtl'))
-                .toString(),
-            },
-          },
-        ],
-      },
+
+    const getItemHandler = new lambda.Function(this, 'GetItemFunction', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset('lib/lambda/getItem'),
+      environment: { TABLE_NAME: table.tableName },
+      role: getItemRole,
     });
-    idResouce.addMethod('GET', getItemIntegration, {
-      methodResponses: [{ statusCode: '200' }],
-    });
+    const getItemIntegration = new apigateway.LambdaIntegration(getItemHandler);
+    idResouce.addMethod('GET', getItemIntegration);
   }
 }
