@@ -1,8 +1,4 @@
-#set($id = $context.requestId.split('-')[0])
+#set($id = $context.requestId.substring(0,4))
 {
-#if($context.path == "/")
-  "tiny": "https://$context.domainName/$id"
-  #else
-  "tiny": "https://$context.domainName$context.path/$id"
-#end
+  "tiny": "https://$context.domainName$context.path$id"
 }

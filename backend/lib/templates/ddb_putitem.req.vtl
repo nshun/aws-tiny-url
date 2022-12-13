@@ -1,5 +1,5 @@
 #set($inputRoot = $input.path('$'))
-#set($id = $context.requestId.split('-')[0])
+#set($id = $context.requestId.substring(0,4))
 #set($expireDate = $context.requestTimeEpoch / 1000 + 60*60*24*7)
 {
     "TableName": "{{TableName}}",
